@@ -1,11 +1,11 @@
-# STEP 2.0 - Java Learning Program
+# STEP - Java Learning Program
 
 Basic STEP classes for learning Java programming fundamentals.
 
 ## Folder Structure
 
 ```
-STEP 2.0/
+SEM-3/
 └── WEEK-1/
     ├── LAB/          # Lab exercises and assignments
     ├── PRACTICE/     # Practice problems
