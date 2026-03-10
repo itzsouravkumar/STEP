@@ -25,3 +25,16 @@ Each stage highlights:
 
 ## Outcome
 By the end of this project, learners will understand not only how to use Java data structures, but when and why to use them—bridging the gap between academic knowledge and real-world system design.
+
+## Use Cases
+
+### Use Case 1: Application Entry & Welcome Message
+**Description:**
+This class represents the entry point of the Hotel Booking Management System.
+At this stage, the application:
+- Starts execution from the `main()` method
+- Displays a welcome message ("Welcome to BookMyStay!")
+- Confirms that the system has started successfully ("System started successfully.")
+
+No business logic, data structures, or user input is implemented in this use case.
+The goal is to establish a clear and predictable application startup point.
