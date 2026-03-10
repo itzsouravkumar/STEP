@@ -38,3 +38,30 @@ At this stage, the application:
 
 No business logic, data structures, or user input is implemented in this use case.
 The goal is to establish a clear and predictable application startup point.
+
+### Use Case 2: Basic Room Types & Static Availability
+**Goal:** Introduce object modeling through inheritance and abstraction before introducing data structures, allowing students to focus on domain design rather than optimization.
+
+**Actor:** User – runs the application to view predefined room types and their availability.
+
+**Flow:**
+1. User runs the application.
+2. Room objects representing different room types are created.
+3. Availability for each room type is stored using simple variables.
+4. Room details and availability information are printed to the console.
+5. Application terminates.
+
+**Key Concepts Used**
+- **Abstract Class** - Represents a generalized concept that should not be instantiated directly.
+- **Inheritance** - Concrete room classes (`SingleRoom`, `DoubleRoom`, `SuiteRoom`) extend the abstract `Room` class.
+- **Polymorphism** - Room objects are referenced using the `Room` type, enabling uniform handling.
+- **Encapsulation** - Room attributes are encapsulated within the `Room` class.
+- **Static Availability Representation** - Room availability is stored using simple variables to highlight the limitations of hardcoded and scattered state management.
+- **Separation of Domain and State** - Room objects represent the room, while availability variables represent current system state.
+
+**Key Requirements**
+- Define an abstract `Room` class with common attributes.
+- Create concrete room classes for Single, Double, and Suite rooms.
+- Initialize room objects in the application entry point.
+- Store room availability using individual variables.
+- Display room details and availability to the console.
