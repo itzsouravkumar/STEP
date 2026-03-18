@@ -130,79 +130,41 @@ Search Service – handles read-only access to inventory and room information.
 - Use Case 3 introduced centralized inventory but did not differentiate between read and write access.
 - Without explicit separation, inventory could be accidentally modified during non-booking operations.
 
-### Use Case 5: Booking Request (First-Come-First-Served)
-**Goal:** Handle multiple booking requests fairly by introducing a request intake mechanism that preserves arrival order, reflecting real-world booking behavior during peak demand.
+### Use Case 7: Add-On Service Selection
+**Goal:** Extend the booking model to support optional services, demonstrating how real-world business features can be added without modifying core booking or allocation logic.
 
 **Actor:**
-Reservation – represents a guest’s intent to book a room.
-Booking Request Queue – manages and orders incoming booking requests.
+* **Guest** – selects optional services for an existing reservation.
+* **Add-On Service** – represents an individual optional offering.
+* **Add-On Service Manager** – manages the association between reservations and selected services.
 
 **Flow:**
-1. Guest submits a booking request.
-2. The request is added to the booking queue.
-3. Requests are stored in arrival order.
-4. Queued requests wait for processing by the allocation system.
-5. No inventory mutation occurs at this stage.
+1. Guest selects one or more add-on services.
+2. Selected services are added to a list.
+3. The list of services is mapped to the corresponding reservation ID.
+4. Additional cost for the reservation is calculated.
+5. Core booking and inventory state remain unchanged.
 
 **Key Concepts Used**
-- **Problem of Simultaneous Requests** - During peak demand, multiple booking requests can arrive at nearly the same time. Without ordering, requests may be processed inconsistently, leading to unfair allocation.
-- **Queue Data Structure** - A `Queue<Reservation>` is used to store booking requests. Queues naturally model waiting lines where elements are processed in sequence.
-- **FIFO Principle** - FIFO (First-Come-First-Served) ensures that the earliest request is processed first. This mirrors fairness expectations in real booking systems.
-- **Fairness** - Using a queue guarantees that no request can bypass another. All guests are treated equally based on request arrival time.
-- **Request Ordering** - The queue preserves insertion order automatically. This eliminates the need for manual sorting or timestamp comparison.
-- **Decoupling Request Intake from Allocation** - Requests are collected first and processed later. This separation prepares the system for controlled allocation and concurrency handling.
+* **Business Extensibility** - Real-world bookings often include additional offerings beyond the primary product. The system must support new features without disrupting existing logic.
+* **One-to-Many Relationship** - A single reservation can have multiple associated services. This relationship is modeled using a map from reservation ID to a list of services.
+* **Map and List Combination** - `Map<String, List<Service>>` allows efficient lookup of services for a reservation. Lists preserve insertion order and allow multiple services to be attached.
+* **Composition over Inheritance** - Services are composed with reservations rather than inherited. This avoids rigid class hierarchies and supports flexible feature growth.
+* **Separation of Core and Optional Features** - Add-on services are managed independently of room allocation and inventory. This prevents optional features from complicating critical booking workflows.
+* **Cost Aggregation** - Service costs are calculated separately and combined when needed. This keeps pricing logic modular and easier to extend.
 
 **Key Requirements**
-- Accept booking requests from guests.
-- Store requests in a queue structure.
-- Preserve the order in which requests arrive.
-- Ensure no room allocation or inventory updates occur at this stage.
-- Prepare requests for subsequent processing.
+* Allow multiple services to be attached to a single reservation.
+* Store selected services using a reservation-to-services mapping.
+* Calculate total additional cost for selected services.
+* Ensure add-on logic does not modify booking or inventory state.
+* Support easy addition of new service types.
 
 **Key Benefits**
-- Fair and deterministic booking request handling
-- Predictable system behavior under peak load
-- Simplified request coordination before allocation
+* Flexible attachment of optional services to reservations
+* Clean mapping between bookings and value-added features
+* Easy expansion of services without core booking changes
 
 **Drawbacks of Previous Use Case**
-- Use Case 4 allowed room visibility but did not handle booking intent.
-- Without a request intake mechanism, simultaneous booking attempts could not be managed fairly.
-
-### Use Case 6: Reservation Confirmation & Room Allocation
-**Goal:** Confirm booking requests by assigning rooms safely while ensuring inventory consistency and preventing double-booking under all circumstances.
-
-**Actor:**
-Booking Service – processes queued booking requests and performs room allocation.
-Inventory Service – maintains and updates room availability state.
-
-**Flow:**
-1. Booking request is dequeued from the request queue.
-2. The system checks availability for the requested room type.
-3. A unique room ID is generated and assigned.
-4. The room ID is recorded to prevent reuse.
-5. Inventory count is decremented immediately.
-6. Reservation is confirmed.
-
-**Key Concepts Used**
-- **Problem of Double Booking** - Without controlled allocation, the same room may be assigned to multiple guests. This results in room ID collisions and inconsistent system state.
-- **Set Data Structure** - A `Set<String>` is used to store allocated room IDs. Sets enforce uniqueness by design, preventing duplicate room assignments.
-- **Uniqueness Enforcement** - By checking against an existing set of room IDs, the system guarantees that no room is assigned more than once. This removes the need for manual duplicate checks.
-- **Mapping Room Types to Assigned Rooms** - A `HashMap<String, Set<String>>` maps each room type to its allocated room IDs. This allows grouped tracking and simplifies validation and reporting.
-- **Atomic Logical Operations** - Room allocation is treated as a single logical unit. Assignment and inventory update occur together to avoid partial or inconsistent state.
-- **Inventory Synchronization** - Inventory is updated immediately after allocation. This ensures that availability reflects the current system state at all times.
-
-**Key Requirements**
-- Retrieve booking requests from the queue in FIFO order.
-- Generate and assign a unique room ID for each confirmed reservation.
-- Prevent reuse of room IDs across all allocations.
-- Update inventory immediately after successful allocation.
-- Ensure allocation logic maintains system consistency.
-
-**Key Benefits**
-- Guaranteed uniqueness of room assignments
-- Immediate synchronization between booking and inventory
-- Elimination of double-booking scenarios
-
-**Drawbacks of Previous Use Case**
-- Use Case 5 handled request ordering but did not confirm bookings.
-- Without allocation and uniqueness enforcement, queued requests could still result in conflicting assignments.
+* Use Case 6 confirmed room allocation but treated bookings as static entities.
+* Without add-on support, the system could not model common real-world booking enhancements.
