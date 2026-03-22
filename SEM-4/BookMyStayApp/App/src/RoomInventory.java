@@ -21,6 +21,12 @@ public class RoomInventory {
         }
     }
 
+    public void releaseRoom(String roomType) {
+        if (availabilityMap.containsKey(roomType)) {
+            availabilityMap.put(roomType, availabilityMap.get(roomType) + 1);
+        }
+    }
+
     public int getAvailableRooms(String roomType) {
         return availabilityMap.getOrDefault(roomType, 0);
     }
