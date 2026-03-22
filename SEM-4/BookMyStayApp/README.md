@@ -90,3 +90,81 @@ The goal is to establish a clear and predictable application startup point.
 - Store room availability using a `HashMap`.
 - Provide methods to retrieve current availability.
 - Support controlled updates to room availability.
+
+### Use Case 4: Room Search & Availability Check
+**Goal:** Enable guests to view available rooms and their details without modifying system state, reinforcing safe data access and clear separation of responsibilities.
+
+**Actor:**
+Guest – initiates a search to view available room options.
+Search Service – handles read-only access to inventory and room information.
+
+**Flow:**
+1. Guest initiates a room search request.
+2. The system retrieves availability data from the inventory.
+3. Room details and pricing are obtained from room objects.
+4. Unavailable room types are filtered out.
+5. Available room types and their details are displayed.
+6. System state remains unchanged.
+
+**Key Concepts Used**
+- **Read-Only Access** - Search operations are designed to read data without altering it. This prevents unintended side effects and ensures system stability.
+- **Defensive Programming** - The search logic performs checks to ensure only valid and available room types are displayed. This protects the system from incorrect assumptions and invalid data usage.
+- **Separation of Concerns** - Search functionality is isolated from inventory mutation and booking logic. This ensures that searching does not interfere with allocation or availability updates.
+- **Inventory as State Holder** - Inventory is accessed only to retrieve current availability counts. No updates are performed during search operations.
+- **Domain Model Usage** - Room objects provide descriptive information such as pricing and amenities. This avoids duplicating room-related data in the inventory layer.
+- **Validation Logic** - Room types with zero availability are excluded from the search results. This ensures that guests see only actionable options.
+
+**Key Requirements**
+- Retrieve room availability from the centralized inventory.
+- Display only room types with availability greater than zero.
+- Show room details and pricing using room domain objects.
+- Ensure inventory data is not modified during search operations.
+- Maintain a clear boundary between search logic and booking logic.
+
+**Key Benefits**
+- Accurate availability visibility without state mutation
+- Reduced risk of accidental inventory corruption
+- Clear separation between read-only and write operations
+
+**Drawbacks of Previous Use Case**
+- Use Case 3 introduced centralized inventory but did not differentiate between read and write access.
+- Without explicit separation, inventory could be accidentally modified during non-booking operations.
+
+### Use Case 7: Add-On Service Selection
+**Goal:** Extend the booking model to support optional services, demonstrating how real-world business features can be added without modifying core booking or allocation logic.
+
+**Actor:**
+* **Guest** – selects optional services for an existing reservation.
+* **Add-On Service** – represents an individual optional offering.
+* **Add-On Service Manager** – manages the association between reservations and selected services.
+
+**Flow:**
+1. Guest selects one or more add-on services.
+2. Selected services are added to a list.
+3. The list of services is mapped to the corresponding reservation ID.
+4. Additional cost for the reservation is calculated.
+5. Core booking and inventory state remain unchanged.
+
+**Key Concepts Used**
+* **Business Extensibility** - Real-world bookings often include additional offerings beyond the primary product. The system must support new features without disrupting existing logic.
+* **One-to-Many Relationship** - A single reservation can have multiple associated services. This relationship is modeled using a map from reservation ID to a list of services.
+* **Map and List Combination** - `Map<String, List<Service>>` allows efficient lookup of services for a reservation. Lists preserve insertion order and allow multiple services to be attached.
+* **Composition over Inheritance** - Services are composed with reservations rather than inherited. This avoids rigid class hierarchies and supports flexible feature growth.
+* **Separation of Core and Optional Features** - Add-on services are managed independently of room allocation and inventory. This prevents optional features from complicating critical booking workflows.
+* **Cost Aggregation** - Service costs are calculated separately and combined when needed. This keeps pricing logic modular and easier to extend.
+
+**Key Requirements**
+* Allow multiple services to be attached to a single reservation.
+* Store selected services using a reservation-to-services mapping.
+* Calculate total additional cost for selected services.
+* Ensure add-on logic does not modify booking or inventory state.
+* Support easy addition of new service types.
+
+**Key Benefits**
+* Flexible attachment of optional services to reservations
+* Clean mapping between bookings and value-added features
+* Easy expansion of services without core booking changes
+
+**Drawbacks of Previous Use Case**
+* Use Case 6 confirmed room allocation but treated bookings as static entities.
+* Without add-on support, the system could not model common real-world booking enhancements.
