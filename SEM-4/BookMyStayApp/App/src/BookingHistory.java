@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class representing the historical records of bookings.
  */
-public class BookingHistory {
+public class BookingHistory implements Serializable {
     private List<Reservation> history;
 
     public BookingHistory() {

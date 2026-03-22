@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoomInventory {
+public class RoomInventory implements Serializable {
     // HashMap to map room types to their available counts
     private Map<String, Integer> availabilityMap;
 

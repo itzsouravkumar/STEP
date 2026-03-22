@@ -1,4 +1,6 @@
-public class Reservation {
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
     private String guestName;
     private String roomType;
     private String reservationId; // New Field for UC-6/7
