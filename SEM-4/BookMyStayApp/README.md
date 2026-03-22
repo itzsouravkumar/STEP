@@ -208,3 +208,41 @@ Search Service – handles read-only access to inventory and room information.
 **Drawbacks of Previous Use Case**
 * Use Case 7 extended booking functionality but did not retain historical data.
 * Without booking history, completed transactions could not be reviewed or analyzed.
+
+### Use Case 9: Error Handling & Validation
+**Goal:** Strengthen system reliability by introducing structured validation and error handling, ensuring that invalid inputs and inconsistent states are detected and handled early.
+
+**Actor:**
+* **Guest** – provides booking input that must be validated.
+* **Invalid Booking Validator** – validates input and system state before processing requests.
+
+**Flow:**
+1. Guest provides booking input.
+2. System validates input values and system constraints.
+3. If validation fails, an error is raised immediately.
+4. A meaningful failure message is displayed.
+5. The system prevents invalid state changes and continues running safely.
+
+**Key Concepts Used**
+* **Input Validation** - Validation ensures that incoming data conforms to expected rules before processing. This prevents invalid or inconsistent data from entering the system.
+* **Custom Exceptions** - Domain-specific exceptions are used to represent invalid booking scenarios. Custom exceptions make error causes explicit and improve code readability.
+* **Fail-Fast Design** - The system detects errors as early as possible and stops further processing. This avoids cascading failures and simplifies debugging.
+* **Guarding System State** - Checks are performed before inventory updates or allocations. This ensures that critical state, such as availability counts, remains valid.
+* **Graceful Failure Handling** - Errors are communicated clearly without crashing the application. This improves system usability and maintainability.
+* **Correctness over Happy Path** - The system is designed to handle incorrect usage, not just ideal scenarios. This reflects real-world conditions where invalid input is common.
+
+**Key Requirements**
+* Validate room types before processing bookings.
+* Prevent inventory from reaching invalid or negative values.
+* Throw and handle custom exceptions for invalid scenarios.
+* Display clear and informative failure messages.
+* Ensure the system remains stable after errors.
+
+**Key Benefits**
+* Early detection of invalid system states
+* Reduced risk of silent data corruption
+* More stable and predictable application behavior
+
+**Drawbacks of Previous Use Case**
+* Use Case 8 focused on storing and reporting booking data but assumed valid input.
+* Without validation, incorrect data could corrupt system state and reports.
