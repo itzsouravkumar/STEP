@@ -64,4 +64,29 @@ The goal is to establish a clear and predictable application startup point.
 - Create concrete room classes for Single, Double, and Suite rooms.
 - Initialize room objects in the application entry point.
 - Store room availability using individual variables.
-- Display room details and availability to the console.
+### Use Case 3: Centralized Room Inventory Management
+**Goal:** Introduce centralized inventory management by replacing scattered availability variables with a single, consistent data structure, demonstrating how `HashMap` solves real-world state management problems.
+
+**Actor:** `RoomInventory` – responsible for managing and exposing room availability across the system.
+
+**Flow:**
+1. The system initializes the inventory component.
+2. Room types are registered with their available counts.
+3. Availability is stored and retrieved from a centralized `HashMap`.
+4. Updates to availability are performed through controlled methods.
+5. The current inventory state is displayed when requested.
+
+**Key Concepts Used**
+- **Problem of Scattered State:** In previous use cases, availability was stored in separate variables leading to inconsistency and poor scalability.
+- **HashMap:** `HashMap<String, Integer>` is used to map room types to available room counts for fast access, updates, and lookups based on a logical key.
+- **O(1) Lookup:** Provides average constant-time complexity for get and put operations, making it suitable for frequent availability checks.
+- **Single Source of Truth:** Centralized structure eliminates discrepancies caused by multiple representations of the same state.
+- **Encapsulation of Inventory Logic:** Inventory-related operations are encapsulated within a dedicated class reducing coupling.
+- **Separation of Concerns:** Inventory manages how many rooms are available, not what a room is (where room attributes remain in the `Room` domain model).
+- **Scalability:** Adding a new room type requires only inserting a new entry into the map.
+
+**Key Requirements**
+- Initialize room availability using a constructor.
+- Store room availability using a `HashMap`.
+- Provide methods to retrieve current availability.
+- Support controlled updates to room availability.
