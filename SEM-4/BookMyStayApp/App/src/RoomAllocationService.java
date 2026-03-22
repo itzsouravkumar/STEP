@@ -30,4 +30,15 @@ public class RoomAllocationService {
             }
         }
     }
+    public synchronized void allocate(Reservation request, RoomInventory inventory) {
+        String roomType = request.getRoomType();
+        if (inventory.getAvailableRooms(roomType) > 0) {
+            allocatedRooms.putIfAbsent(roomType, new HashSet<>());
+            Set<String> assignedIds = allocatedRooms.get(roomType);
+            String roomId = roomType + "-" + (assignedIds.size() + 1);
+            assignedIds.add(roomId);
+            inventory.updateAvailability(roomType, -1);
+            System.out.println("Booking confirmed for Guest: " + request.getGuestName() + ", Room ID: " + roomId);
+        }
+    }
 }
