@@ -1021,6 +1021,113 @@ UC10 aggregation completed...
 - Replaces error-prone manual summation loops.
 - Builds foundation for advanced analytics use cases.
 
+## UC-11: Validate Train ID & Cargo Codes (Regex)
+
+### Drawback of UC-10 Approach
+UC-10 computes metrics assuming input is already valid.
+In real operations, malformed IDs and cargo codes are common and can corrupt downstream processes.
+
+### Goal
+Validate Train ID and Cargo Code formats using regex (`Pattern` and `Matcher`).
+
+### Actor
+User
+
+### Flow
+1. User enters Train ID and Cargo Code.
+2. System compiles regex patterns.
+3. `Matcher` checks input against patterns.
+4. Valid/invalid result is shown.
+5. Program continues.
+
+### Key Concepts Used in UC-11
+- Regex format rules (`TRN-\\d{4}`, `PET-[A-Z]{2}`)
+- `Pattern` class for compiled regex
+- `Matcher` class for applying regex on input
+- `matches()` for full-string validation
+- Input format enforcement before processing
+- Data integrity protection
+
+### Key Requirements
+- Train ID pattern: `TRN-\\d{4}`
+- Cargo code pattern: `PET-[A-Z]{2}`
+- Compile patterns via `Pattern`
+- Use `Matcher` + `matches()`
+- Display validation results
+
+### Reference Code (UC-11)
+```java
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class UseCase11ValidateTrainIdAndCargoCode {
+    private static final Pattern TRAIN_ID_PATTERN = Pattern.compile("TRN-\\d{4}");
+    private static final Pattern CARGO_CODE_PATTERN = Pattern.compile("PET-[A-Z]{2}");
+
+    public static boolean isValidTrainId(String trainId) {
+        Matcher matcher = TRAIN_ID_PATTERN.matcher(trainId);
+        return matcher.matches();
+    }
+
+    public static boolean isValidCargoCode(String cargoCode) {
+        Matcher matcher = CARGO_CODE_PATTERN.matcher(cargoCode);
+        return matcher.matches();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("UC11 Validate Train ID and Cargo Code -");
+        System.out.println("Enter Train ID (Format: TRN-1234):");
+        String trainId = scanner.nextLine();
+
+        System.out.println("Enter Cargo Code (Format: PET-AB):");
+        String cargoCode = scanner.nextLine();
+
+        boolean trainIdValid = isValidTrainId(trainId);
+        boolean cargoCodeValid = isValidCargoCode(cargoCode);
+
+        System.out.println("Validation Results:");
+        System.out.println("Train ID Valid: " + trainIdValid);
+        System.out.println("Cargo Code Valid: " + cargoCodeValid);
+        System.out.println("UC11 validation completed...");
+    }
+}
+```
+
+UC-11 file location:
+`App/src/UseCase11ValidateTrainIdAndCargoCode.java`
+
+### Expected Output Format
+```text
+UC11 Validate Train ID and Cargo Code -
+Enter Train ID (Format: TRN-1234):
+TRN-6524
+Enter Cargo Code (Format: PET-AB):
+PET-FH
+Validation Results:
+Train ID Valid: true
+Cargo Code Valid: true
+UC11 validation completed...
+```
+
+### Suggested Test Cases
+- `testRegex_ValidTrainID()`
+- `testRegex_InvalidTrainIDFormat()`
+- `testRegex_ValidCargoCode()`
+- `testRegex_InvalidCargoCodeFormat()`
+- `testRegex_TrainIDDigitLengthValidation()`
+- `testRegex_CargoCodeUppercaseValidation()`
+- `testRegex_EmptyInputHandling()`
+- `testRegex_ExactPatternMatch()`
+
+### Key Benefits
+- Ensures correctness of operational input.
+- Prevents malformed data from corrupting workflows.
+- Introduces enterprise-grade regex validation.
+- Builds robust input-handling foundation.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
