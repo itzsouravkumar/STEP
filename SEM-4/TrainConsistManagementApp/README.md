@@ -438,6 +438,95 @@ UC5 formation setup completed...
 - Demonstrates ordering plus uniqueness in one data structure.
 - Builds foundation for safe and predictable train composition.
 
+## UC-6: Map Bogie to Capacity (HashMap)
+
+### Drawback of UC-5 Approach
+In UC-5, formation uses bogie names with ordering and uniqueness.
+But real railway operation requires each bogie to carry operational attributes:
+- Seating capacity for passenger bogies
+- Load capacity for goods bogies
+- Safety-related limits
+
+A flat set of names cannot store this associated data.
+
+### Goal
+Associate each bogie with seating/load capacity using key-value mapping.
+
+### Actor
+User
+
+### Flow
+1. User creates bogie-capacity mapping.
+2. System stores bogie names as keys and capacities as values.
+3. Entries are inserted into `HashMap`.
+4. System iterates over `entrySet()`.
+5. Capacity details are displayed.
+6. Program continues.
+
+### Key Concepts Used in UC-6
+- `HashMap` - Key-value storage for bogie and capacity.
+- `Map` interface - Represents mapping between unique keys and values.
+- `put()` - Inserts bogie-capacity pairs.
+- Key-value association - Binds each bogie to its property.
+- `entrySet()` iteration - Accesses key and value together.
+- Fast lookup by key - Efficient retrieval for validation/planning.
+
+### Key Requirements
+- Create `HashMap<String, Integer>` for bogie capacities.
+- Insert values for `Sleeper`, `AC Chair`, `First Class`, `Cargo`.
+- Use `put()` for insertion.
+- Iterate with `entrySet()`.
+- Print each bogie with its capacity.
+
+### Reference Code (UC-6)
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class UseCase6MapBogieToCapacity {
+    public static void main(String[] args) {
+        System.out.println("==");
+        System.out.println("UC6 Map Bogie to Capacity (HashMap)");
+
+        Map<String, Integer> bogieCapacity = new HashMap<>();
+        bogieCapacity.put("First Class", 24);
+        bogieCapacity.put("Cargo", 120);
+        bogieCapacity.put("Sleeper", 72);
+        bogieCapacity.put("AC Chair", 56);
+
+        System.out.println("Bogie Capacity Details:");
+        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+
+        System.out.println("UC6 bogie-capacity mapping completed...");
+    }
+}
+```
+
+UC-6 file location:
+`App/src/UseCase6MapBogieToCapacity.java`
+
+### Expected Output Format
+```text
+==
+UC6 Map Bogie to Capacity (HashMap)
+Bogie Capacity Details:
+First Class -> 24
+Cargo -> 120
+Sleeper -> 72
+AC Chair -> 56
+UC6 bogie-capacity mapping completed...
+```
+
+Note: `HashMap` iteration order is not guaranteed.
+
+### Key Benefits
+- Models real-world attribute mapping in software systems.
+- Introduces key-value representation over flat collections.
+- Enables fast lookup and validation of bogie properties.
+- Builds foundation for analytics and planning in later use cases.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
