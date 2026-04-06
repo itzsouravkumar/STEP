@@ -638,6 +638,132 @@ UC7 sorting completed...
 - Improves planning and capacity analysis.
 - Prepares students for enterprise collection processing.
 
+## UC-8: Filter Passenger Bogies Using Streams
+
+### Drawback of UC-7 Approach
+UC-7 sorts bogies, but does not support conditional selection based on business rules.
+Railway admins often need filtered views, such as only high-capacity bogies.
+Traditional loops are verbose and mix iteration details with business logic.
+
+### Goal
+Filter passenger bogies using Stream pipelines based on seating capacity.
+
+### Actor
+User
+
+### Flow
+1. User creates a list of bogies.
+2. System converts list to stream.
+3. `filter()` is applied with capacity condition.
+4. Matching bogies are collected to a new list.
+5. Filtered bogies are displayed.
+6. Program continues.
+
+### Key Concepts Used in UC-8
+- Stream API - Declarative collection processing.
+- `stream()` - Builds stream pipeline from list.
+- `filter()` - Selects elements matching condition.
+- Lambda expressions - Concise rule definition.
+- `collect(toList())` - Converts pipeline result to list.
+- Declarative style - Focuses on business intent over loop mechanics.
+
+### Key Requirements
+- Reuse Bogie object style from UC-7.
+- Create stream from bogie list.
+- Apply condition: `b.capacity > 60`.
+- Collect into a new list.
+- Display filtered bogies.
+
+### Reference Code (UC-8)
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UseCase8FilterPassengerBogiesUsingStreams {
+    static class Bogie {
+        private final String name;
+        private final int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
+    }
+
+    public static List<Bogie> filterByCapacityGreaterThan(List<Bogie> bogies, int threshold) {
+        return bogies.stream()
+                .filter(b -> b.getCapacity() > threshold)
+                .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC8 Filter Passenger Bogies Using Streams -");
+
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("General", 90));
+
+        System.out.println("All Bogies:");
+        for (Bogie bogie : bogies) {
+            System.out.println(bogie);
+        }
+
+        List<Bogie> filtered = filterByCapacityGreaterThan(bogies, 60);
+        System.out.println("Filtered Bogies (Capacity > 60):");
+        for (Bogie bogie : filtered) {
+            System.out.println(bogie);
+        }
+
+        System.out.println("UC8 filtering completed...");
+    }
+}
+```
+
+UC-8 file location:
+`App/src/UseCase8FilterPassengerBogiesUsingStreams.java`
+
+### Expected Output Format
+```text
+UC8 Filter Passenger Bogies Using Streams -
+All Bogies:
+Sleeper -> 72
+AC Chair -> 56
+First Class -> 24
+General -> 90
+Filtered Bogies (Capacity > 60):
+Sleeper -> 72
+General -> 90
+UC8 filtering completed...
+```
+
+### Suggested Test Cases
+- `testFilter_CapacityGreaterThanThreshold()`
+- `testFilter_CapacityEqualToThreshold()`
+- `testFilter_CapacityLessThanThreshold()`
+- `testFilter_MultipleBogiesMatching()`
+- `testFilter_NoBogiesMatching()`
+- `testFilter_AllBogiesMatching()`
+- `testFilter_EmptyBogieList()`
+- `testFilter_OriginalListUnchanged()`
+
+### Key Benefits
+- Reduces boilerplate iteration code.
+- Improves readability of business filtering rules.
+- Introduces functional-style Java programming.
+- Strengthens maintainable collection processing skills.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
