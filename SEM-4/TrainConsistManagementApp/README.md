@@ -764,6 +764,146 @@ UC8 filtering completed...
 - Introduces functional-style Java programming.
 - Strengthens maintainable collection processing skills.
 
+## UC-9: Group Bogies by Type (Collectors.groupingBy)
+
+### Drawback of UC-8 Approach
+UC-8 filters bogies but still returns a flat list.
+Operational reporting often needs categorized structure (by bogie type/class), not flat output.
+
+### Goal
+Group bogies into categories using stream collectors.
+
+### Actor
+User
+
+### Flow
+1. User creates a list of bogies.
+2. System converts list into stream.
+3. `Collectors.groupingBy()` is applied.
+4. Bogies are grouped into `Map<String, List<Bogie>>`.
+5. Grouped result is displayed.
+6. Program continues.
+
+### Key Concepts Used in UC-9
+- `Collectors.groupingBy()` - Classifies elements by key.
+- Stream pipeline - Transforms list to grouped map.
+- `Map<String, List<Bogie>>` output structure.
+- Lambda/method reference classification logic.
+- Data aggregation into logical clusters.
+- Structured transformation for reporting.
+
+### Key Requirements
+- Reuse Bogie object list.
+- Create stream using `stream()`.
+- Apply `Collectors.groupingBy()` by bogie type.
+- Store result in `Map<String, List<Bogie>>`.
+- Print grouped structure.
+
+### Reference Code (UC-9)
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class UseCase9GroupBogiesByType {
+    static class Bogie {
+        private final String type;
+        private final int capacity;
+
+        Bogie(String type, int capacity) {
+            this.type = type;
+            this.capacity = capacity;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return type + " -> " + capacity;
+        }
+    }
+
+    public static Map<String, List<Bogie>> groupByType(List<Bogie> bogies) {
+        return bogies.stream()
+                .collect(Collectors.groupingBy(Bogie::getType));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC9 - Group Bogies by Type");
+
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 70));
+        bogies.add(new Bogie("AC Chair", 60));
+
+        System.out.println("All Bogies:");
+        for (Bogie bogie : bogies) {
+            System.out.println(bogie);
+        }
+
+        Map<String, List<Bogie>> grouped = groupByType(bogies);
+        System.out.println("Grouped Bogies:");
+        for (Map.Entry<String, List<Bogie>> entry : grouped.entrySet()) {
+            System.out.println("Bogie Type: " + entry.getKey());
+            for (Bogie bogie : entry.getValue()) {
+                System.out.println("Capacity -> " + bogie.getCapacity());
+            }
+        }
+
+        System.out.println("UC9 grouping completed...");
+    }
+}
+```
+
+UC-9 file location:
+`App/src/UseCase9GroupBogiesByType.java`
+
+### Expected Output Format
+```text
+UC9 - Group Bogies by Type
+All Bogies:
+Sleeper -> 72
+AC Chair -> 56
+First Class -> 24
+Sleeper -> 70
+AC Chair -> 60
+Grouped Bogies:
+Bogie Type: First Class
+Capacity -> 24
+Bogie Type: Sleeper
+Capacity -> 72
+Capacity -> 70
+Bogie Type: AC Chair
+Capacity -> 56
+Capacity -> 60
+UC9 grouping completed...
+```
+
+### Suggested Test Cases
+- `testGrouping_BogiesGroupedByType()`
+- `testGrouping_MultipleBogiesInSameGroup()`
+- `testGrouping_DifferentBogieTypes()`
+- `testGrouping_EmptyBogieList()`
+- `testGrouping_SingleBogieCategory()`
+- `testGrouping_MapContainsCorrectKeys()`
+- `testGrouping_GroupSizeValidation()`
+- `testGrouping_OriginalListUnchanged()`
+
+### Key Benefits
+- Converts flat data into meaningful grouped structure.
+- Supports operational reporting and monitoring.
+- Introduces advanced stream collectors.
+- Builds foundation for dashboards and analytics.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
