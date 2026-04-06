@@ -527,6 +527,117 @@ Note: `HashMap` iteration order is not guaranteed.
 - Enables fast lookup and validation of bogie properties.
 - Builds foundation for analytics and planning in later use cases.
 
+## UC-7: Sort Bogies by Capacity (Comparator)
+
+### Drawback of UC-6 Approach
+UC-6 stores bogies with capacities, but does not rank or order them for planning.
+Railway operations often need capacity-based ordering to prioritize utilization and reporting.
+
+### Goal
+Sort passenger bogies by seating capacity using custom comparator logic.
+
+### Actor
+User
+
+### Flow
+1. User creates passenger bogie objects.
+2. Bogies are stored in a `List`.
+3. System applies `Comparator` sorting by capacity.
+4. Sorted bogies are displayed.
+5. Program continues.
+
+### Key Concepts Used in UC-7
+- `Comparator` interface - Custom business-rule sorting logic.
+- Custom objects - Bogies modeled with `name` and `capacity`.
+- `List` collection - Dynamic storage for multiple objects.
+- `sort()` - Reorders list using comparator logic.
+- Lambda/method references - Concise comparison expression.
+- Separation of data and behavior - Cleaner maintainability.
+
+### Key Requirements
+- Create a `Bogie` class with `name` and `capacity`.
+- Create `List<Bogie>` for passenger bogies.
+- Add `Sleeper`, `AC Chair`, `First Class`, `General`.
+- Use `Comparator.comparingInt()` for capacity sorting.
+- Display before and after sorting.
+
+### Reference Code (UC-7)
+```java
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class UseCase7SortBogiesByCapacity {
+    private static class Bogie {
+        private final String name;
+        private final int capacity;
+
+        public Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC7 Sort Bogies by Capacity (Comparator)");
+
+        List<Bogie> passengerBogies = new ArrayList<>();
+        passengerBogies.add(new Bogie("Sleeper", 72));
+        passengerBogies.add(new Bogie("AC Chair", 56));
+        passengerBogies.add(new Bogie("First Class", 24));
+        passengerBogies.add(new Bogie("General", 90));
+
+        System.out.println("Before Sorting:");
+        for (Bogie bogie : passengerBogies) {
+            System.out.println(bogie);
+        }
+
+        passengerBogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+
+        System.out.println("After Sorting by Capacity:");
+        for (Bogie bogie : passengerBogies) {
+            System.out.println(bogie);
+        }
+
+        System.out.println("UC7 sorting completed...");
+    }
+}
+```
+
+UC-7 file location:
+`App/src/UseCase7SortBogiesByCapacity.java`
+
+### Expected Output Format
+```text
+UC7 Sort Bogies by Capacity (Comparator)
+Before Sorting:
+Sleeper -> 72
+AC Chair -> 56
+First Class -> 24
+General -> 90
+After Sorting by Capacity:
+First Class -> 24
+AC Chair -> 56
+Sleeper -> 72
+General -> 90
+UC7 sorting completed...
+```
+
+### Key Benefits
+- Introduces object-based collection handling over primitive strings.
+- Applies business rules using custom sorting.
+- Improves planning and capacity analysis.
+- Prepares students for enterprise collection processing.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
