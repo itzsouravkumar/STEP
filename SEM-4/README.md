@@ -6,3 +6,6 @@ This directory contains the projects and applications developed during Semester 
 
 ### [PallindromeCheckerApp](./PallindromeCheckerApp)
 An application designed to check if a given input is a palindrome. For specific details on how to run, configure, or test this application, please refer to the dedicated `README.md` located within its directory.
+
+### [TrainConsistManagementApp](./TrainConsistManagementApp)
+An initialized project directory for the Train Consist Management App, prepared for incremental Core Java and data-structure based implementation.
