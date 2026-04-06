@@ -904,6 +904,123 @@ UC9 grouping completed...
 - Introduces advanced stream collectors.
 - Builds foundation for dashboards and analytics.
 
+## UC-10: Count Total Seats in Train (reduce)
+
+### Drawback of UC-9 Approach
+UC-9 groups bogies, but grouped structure alone does not provide numeric metrics.
+Railway planning needs total seating capacity for operational decisions and utilization forecasting.
+
+### Goal
+Aggregate seating capacities into one total value using stream reduction.
+
+### Actor
+User
+
+### Flow
+1. User creates a list of bogies.
+2. System converts list into stream.
+3. `map()` extracts capacities.
+4. `reduce()` sums capacities.
+5. Total seating capacity is displayed.
+6. Program continues.
+
+### Key Concepts Used in UC-10
+- `map()` - Transforms Bogie objects into numeric capacities.
+- `reduce()` - Aggregates multiple values into one result.
+- Method reference (`Integer::sum`) for concise aggregation.
+- Functional aggregation over imperative loops.
+- Stream pipeline combining transformation + reduction.
+- Numeric analytics for operational metrics.
+
+### Key Requirements
+- Reuse Bogie object list.
+- Create stream using `stream()`.
+- Apply `map(b -> b.capacity)` logic.
+- Use `reduce(0, Integer::sum)` for total.
+- Display total seating capacity.
+
+### Reference Code (UC-10)
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class UseCase10CountTotalSeatsInTrain {
+    static class Bogie {
+        private final String name;
+        private final int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
+    }
+
+    public static int totalSeatingCapacity(List<Bogie> bogies) {
+        return bogies.stream()
+                .map(Bogie::getCapacity)
+                .reduce(0, Integer::sum);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC10 Count Total Seats in Train -");
+
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 70));
+
+        System.out.println("Bogies in Train:");
+        for (Bogie bogie : bogies) {
+            System.out.println(bogie);
+        }
+
+        int total = totalSeatingCapacity(bogies);
+        System.out.println("Total Seating Capacity of Train: " + total);
+        System.out.println("UC10 aggregation completed...");
+    }
+}
+```
+
+UC-10 file location:
+`App/src/UseCase10CountTotalSeatsInTrain.java`
+
+### Expected Output Format
+```text
+UC10 Count Total Seats in Train -
+Bogies in Train:
+Sleeper -> 72
+AC Chair -> 56
+First Class -> 24
+Sleeper -> 70
+Total Seating Capacity of Train: 222
+UC10 aggregation completed...
+```
+
+### Suggested Test Cases
+- `testReduce_TotalSeatCalculation()`
+- `testReduce_MultipleBogiesAggregation()`
+- `testReduce_SingleBogieCapacity()`
+- `testReduce_EmptyBogieList()`
+- `testReduce_CorrectCapacityExtraction()`
+- `testReduce_AllBogiesIncluded()`
+- `testReduce_OriginalListUnchanged()`
+
+### Key Benefits
+- Introduces aggregation in functional style.
+- Provides quantitative metrics for planning.
+- Replaces error-prone manual summation loops.
+- Builds foundation for advanced analytics use cases.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
