@@ -263,6 +263,100 @@ Note: `HashSet` output order is not guaranteed, but duplicates will always be re
 - Teaches when to use `Set` instead of `List`.
 - Introduces uniqueness as a real-world requirement.
 
+## UC-4: Maintain Ordered Bogie IDs (TreeSet & SortedSet)
+
+### Drawback of UC-3 Approach
+In UC-3, uniqueness is handled with `HashSet`, but `HashSet` does not preserve order.
+Train composition must follow a physical sequence:
+`Locomotive -> Passenger -> Cargo -> Guard Coach`
+
+So we need a structure that supports ordered chaining and efficient insertion/deletion.
+For this use case, `LinkedList` is used.
+
+### Goal
+Maintain ordered bogie composition while supporting efficient insertion/removal operations.
+
+### Actor
+User
+
+### Flow
+1. User adds bogies to the train consist.
+2. System stores bogies in a `LinkedList`.
+3. Pantry Car is inserted in the middle.
+4. First and last bogies are removed.
+5. Final ordered consist is displayed.
+
+### Key Concepts Used in UC-4
+- `LinkedList` - Doubly linked list implementation of `List`.
+- Node structure concept - Each element links to previous/next nodes.
+- `addFirst()` / `addLast()` - Attach bogies at ends.
+- `add(index, element)` - Insert bogie in middle.
+- `removeFirst()` / `removeLast()` - Detach from head/tail.
+- Order preservation - Maintains physical train sequence.
+
+### Key Requirements
+- Create `LinkedList<String>` for consist.
+- Add bogies: `Engine`, `Sleeper`, `AC`, `Cargo`, `Guard`.
+- Insert `Pantry Car` at position `2`.
+- Remove first and last bogie.
+- Display final ordered consist.
+
+### Reference Code (UC-4)
+```java
+import java.util.LinkedList;
+
+public class UseCase4MaintainOrderedBogieConsist {
+    public static void main(String[] args) {
+        System.out.println("UC4 Maintain Ordered Bogie Consist -");
+        System.out.println("=");
+
+        LinkedList<String> trainConsist = new LinkedList<>();
+
+        trainConsist.add("Engine");
+        trainConsist.add("Sleeper");
+        trainConsist.add("AC");
+        trainConsist.add("Cargo");
+        trainConsist.add("Guard");
+
+        System.out.println("Initial Train Consist:");
+        System.out.println(trainConsist);
+
+        trainConsist.add(2, "Pantry Car");
+        System.out.println("After Inserting 'Pantry Car' at position 2:");
+        System.out.println(trainConsist);
+
+        trainConsist.removeFirst();
+        trainConsist.removeLast();
+        System.out.println("After Removing First and Last Bogie:");
+        System.out.println(trainConsist);
+
+        System.out.println("UC4 ordered consist operations completed...");
+    }
+}
+```
+
+UC-4 file location:
+`App/src/UseCase4MaintainOrderedBogieConsist.java`
+
+### Expected Output Format
+```text
+UC4 Maintain Ordered Bogie Consist -
+=
+Initial Train Consist:
+[Engine, Sleeper, AC, Cargo, Guard]
+After Inserting 'Pantry Car' at position 2:
+[Engine, Sleeper, Pantry Car, AC, Cargo, Guard]
+After Removing First and Last Bogie:
+[Sleeper, Pantry Car, AC, Cargo]
+UC4 ordered consist operations completed...
+```
+
+### Key Benefits
+- Models real-world chaining behavior.
+- Teaches when `LinkedList` is better than `ArrayList`.
+- Demonstrates insertion/deletion efficiency.
+- Helps visualize node-based structures.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
