@@ -180,6 +180,89 @@ UC2 operations completed successfully...
 - Introduces CRUD behavior on data structures.
 - Helps students visualize how bogies are attached and detached.
 
+## UC-3: Track Unique Bogie IDs (Set - HashSet)
+
+### Drawback of UC-2 Approach
+In UC-2, bogies are stored in a `List`, which allows duplicate values.
+In a railway system, duplicate bogie IDs are unsafe and violate business rules.
+Example invalid case:
+`BG101, BG101`
+
+To enforce uniqueness, UC-3 introduces the `Set` data structure.
+
+### Goal
+Ensure no duplicate bogie IDs are added to the train.
+
+### Actor
+User
+
+### Flow
+1. User adds bogie IDs.
+2. System inserts IDs into `HashSet`.
+3. Duplicates are ignored automatically.
+4. Unique bogie IDs are displayed.
+
+### Key Concepts Used in UC-3
+- `Set` interface - Collection type that does not allow duplicates.
+- `HashSet` - `Set` implementation using hashing for fast operations.
+- `add()` - Inserts values into the set.
+- Automatic deduplication - Duplicate values are ignored.
+- Unordered storage - No index-based insertion order guarantee.
+
+### Key Requirements
+- Create `HashSet<String>` for bogie IDs.
+- Add duplicate values intentionally.
+- Print the final set.
+- Observe that duplicates are removed automatically.
+
+### Reference Code (UC-3)
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class UseCase3TrackUniqueBogieIds {
+    public static void main(String[] args) {
+        System.out.println("UC3 Track Unique Bogie IDs -");
+
+        Set<String> bogieIds = new HashSet<>();
+
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+        bogieIds.add("BG103");
+        bogieIds.add("BG104");
+        bogieIds.add("BG101");
+        bogieIds.add("BG102");
+
+        System.out.println("Bogie IDs After Insertion:");
+        System.out.println(bogieIds);
+        System.out.println("Note:");
+        System.out.println("Duplicates are automatically ignored by HashSet.");
+        System.out.println("UC3 uniqueness validation completed...");
+    }
+}
+```
+
+UC-3 file location:
+`App/src/UseCase3TrackUniqueBogieIds.java`
+
+### Expected Output Format
+```text
+UC3 Track Unique Bogie IDs -
+Bogie IDs After Insertion:
+[BG104, BG103, BG102, BG101]
+Note:
+Duplicates are automatically ignored by HashSet.
+UC3 uniqueness validation completed...
+```
+
+Note: `HashSet` output order is not guaranteed, but duplicates will always be removed.
+
+### Key Benefits
+- Enforces business constraints.
+- Prevents data corruption.
+- Teaches when to use `Set` instead of `List`.
+- Introduces uniqueness as a real-world requirement.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
