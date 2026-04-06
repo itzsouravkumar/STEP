@@ -1128,6 +1128,133 @@ UC11 validation completed...
 - Introduces enterprise-grade regex validation.
 - Builds robust input-handling foundation.
 
+## UC-12: Safety Compliance Check for Goods Bogies
+
+### Drawback of UC-11 Approach
+Earlier use cases process goods bogies without enforcing domain-specific safety rules.
+This is risky because cylindrical bogies should carry only liquid cargo like petroleum.
+Without validation, unsafe train formation can pass silently.
+
+### Goal
+Encapsulate goods-bogie safety rules and validate them declaratively using streams.
+
+### Actor
+User
+
+### Flow
+1. User prepares goods bogie list.
+2. System converts list into stream.
+3. `allMatch()` applies safety condition.
+4. Cylindrical bogies are checked for allowed cargo.
+5. System marks train as safe/unsafe.
+6. Program continues.
+
+### Key Concepts Used in UC-12
+- Streams API for declarative validation
+- `allMatch()` for complete compliance checks
+- Lambda-based business-rule predicates
+- Conditional logic inside stream pipeline
+- Short-circuit behavior for fast failure
+- Domain safety policy modeling in code
+
+### Key Requirements
+- Create goods bogie collection with `type` and `cargo`.
+- Stream the collection.
+- Use `allMatch()` to validate each bogie.
+- Rule: `Cylindrical` bogie must carry only `Petroleum`.
+- Store result in boolean and display status.
+
+### Reference Code (UC-12)
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class UseCase12SafetyComplianceGoodsBogies {
+    static class GoodsBogie {
+        private final String type;
+        private final String cargo;
+
+        GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getCargo() {
+            return cargo;
+        }
+
+        @Override
+        public String toString() {
+            return type + " -> " + cargo;
+        }
+    }
+
+    public static boolean isSafetyCompliant(List<GoodsBogie> bogies) {
+        return bogies.stream().allMatch(b ->
+                !b.getType().equalsIgnoreCase("Cylindrical")
+                        || b.getCargo().equalsIgnoreCase("Petroleum"));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC12 - Safety Compliance Check for Goods Bogies");
+
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Open", "Coal"));
+        goodsBogies.add(new GoodsBogie("Box", "Grain"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal"));
+
+        System.out.println("Goods Bogies in Train:");
+        for (GoodsBogie bogie : goodsBogies) {
+            System.out.println(bogie);
+        }
+
+        boolean safe = isSafetyCompliant(goodsBogies);
+        System.out.println("Safety Compliance Status: " + safe);
+        if (safe) {
+            System.out.println("Train formation is SAFE.");
+        } else {
+            System.out.println("Train formation is NOT SAFE.");
+        }
+
+        System.out.println("UC12 safety validation completed...");
+    }
+}
+```
+
+UC-12 file location:
+`App/src/UseCase12SafetyComplianceGoodsBogies.java`
+
+### Expected Output Format
+```text
+UC12 - Safety Compliance Check for Goods Bogies
+Goods Bogies in Train:
+Cylindrical -> Petroleum
+Open -> Coal
+Box -> Grain
+Cylindrical -> Coal
+Safety Compliance Status: false
+Train formation is NOT SAFE.
+UC12 safety validation completed...
+```
+
+### Suggested Test Cases
+- `testSafety_AllBogiesValid()`
+- `testSafety_CylindricalWithInvalidCargo()`
+- `testSafety_NonCylindricalBogiesAllowed()`
+- `testSafety_MixedBogiesWithViolation()`
+- `testSafety_EmptyBogieList()`
+
+### Key Benefits
+- Enforces real-world safety constraints in code.
+- Prevents unsafe cargo configurations early.
+- Replaces manual validations with declarative stream rules.
+- Improves reliability of train formation logic.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
