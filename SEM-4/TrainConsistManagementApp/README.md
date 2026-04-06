@@ -89,6 +89,97 @@ System ready for operations...
 - Demonstrates why dynamic collections are preferred over fixed arrays.
 - Builds the foundation for all subsequent use cases.
 
+## UC-2: Add Passenger Bogies to Train (ArrayList Operations)
+
+### Drawback of UC-1 Approach
+In UC-1, the train consist is initialized but contains no bogies.
+There is no way to add, remove, or inspect bogies dynamically.
+To simulate a real railway system, the application must support:
+- Adding passenger bogies
+- Removing bogies
+- Checking whether a bogie exists
+
+### Goal
+Allow dynamic insertion and removal of passenger bogies using `ArrayList`.
+
+### Actor
+User
+
+### Flow
+1. User runs program.
+2. Passenger bogies are added.
+3. Bogies are displayed.
+4. A bogie is removed.
+5. Existence is checked.
+6. Program continues.
+
+### Key Concepts Used in UC-2
+- `ArrayList` - Resizable collection supporting runtime insertion/deletion.
+- `add()` - Inserts elements in the list.
+- `remove()` - Deletes elements from the list.
+- `contains()` - Checks whether an element exists.
+- Insertion order preservation - `ArrayList` keeps add order.
+- CRUD operations - Create, Read, Update, Delete on collections.
+
+### Key Requirements
+- Create `ArrayList<String>` for passenger bogies.
+- Add bogies: `Sleeper`, `AC Chair`, `First Class`.
+- Print list after insertion.
+- Remove one bogie (example: `AC Chair`).
+- Use `contains()` to check if `Sleeper` exists.
+- Print final list state.
+
+### Reference Code (UC-2)
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class UseCase2AddPassengerBogies {
+    public static void main(String[] args) {
+        System.out.println("UC2 Add Passenger Bogies to Train");
+
+        List<String> passengerBogies = new ArrayList<>();
+
+        passengerBogies.add("Sleeper");
+        passengerBogies.add("AC Chair");
+        passengerBogies.add("First Class");
+
+        System.out.println("After Adding Bogies:");
+        System.out.println("Passenger Bogies: " + passengerBogies);
+
+        passengerBogies.remove("AC Chair");
+        System.out.println("After Removing 'AC Chair':");
+        System.out.println("Passenger Bogies: " + passengerBogies);
+
+        boolean containsSleeper = passengerBogies.contains("Sleeper");
+        System.out.println("Checking if 'Sleeper' exists: Contains Sleeper?: " + containsSleeper);
+        System.out.println("Final Train Passenger Consist: " + passengerBogies);
+        System.out.println("UC2 operations completed successfully...");
+    }
+}
+```
+
+UC-2 file location:
+`App/src/UseCase2AddPassengerBogies.java`
+
+### Expected Output Format
+```text
+UC2 Add Passenger Bogies to Train
+After Adding Bogies:
+Passenger Bogies: [Sleeper, AC Chair, First Class]
+After Removing 'AC Chair':
+Passenger Bogies: [Sleeper, First Class]
+Checking if 'Sleeper' exists: Contains Sleeper?: true
+Final Train Passenger Consist: [Sleeper, First Class]
+UC2 operations completed successfully...
+```
+
+### Key Benefits
+- Demonstrates real-world list management.
+- Shows how collections grow dynamically.
+- Introduces CRUD behavior on data structures.
+- Helps students visualize how bogies are attached and detached.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
