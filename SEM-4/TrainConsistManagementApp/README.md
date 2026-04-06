@@ -357,6 +357,87 @@ UC4 ordered consist operations completed...
 - Demonstrates insertion/deletion efficiency.
 - Helps visualize node-based structures.
 
+## UC-5: Preserve Insertion Order of Bogies (LinkedHashSet)
+
+### Drawback of UC-4 Approach
+In UC-4, sequence is maintained using `LinkedList`.
+However, when uniqueness is also required for train formation, plain list-based structures can still allow duplicates unless manually validated.
+We need a structure that:
+- Preserves attachment order
+- Prevents duplicate bogies automatically
+
+This use case introduces `LinkedHashSet`.
+
+### Goal
+Maintain insertion order while enforcing uniqueness.
+
+### Actor
+User
+
+### Flow
+1. User adds bogies.
+2. `LinkedHashSet` stores the formation.
+3. Duplicate entries are ignored.
+4. Formation is printed in original insertion order.
+
+### Key Concepts Used in UC-5
+- `LinkedHashSet` - Unique elements + insertion order preservation.
+- `Set` interface - Prevents duplicates by design.
+- `add()` - Adds bogies; duplicate add is ignored.
+- Automatic deduplication - No manual duplicate check needed.
+- Ordered iteration - Prints in actual insertion sequence.
+
+### Key Requirements
+- Create `LinkedHashSet<String>` to represent train formation.
+- Attach bogies: `Engine`, `Sleeper`, `Cargo`, `Guard`.
+- Try duplicate insertion (e.g., `Sleeper` again).
+- Print final formation using `System.out.println()`.
+- Ensure output has no duplicate bogies.
+
+### Reference Code (UC-5)
+```java
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class UseCase5PreserveInsertionOrderBogies {
+    public static void main(String[] args) {
+        System.out.println("UC5 Preserve Insertion Order of Bogies");
+
+        Set<String> trainFormation = new LinkedHashSet<>();
+        trainFormation.add("Engine");
+        trainFormation.add("Sleeper");
+        trainFormation.add("Cargo");
+        trainFormation.add("Guard");
+        trainFormation.add("Sleeper");
+
+        System.out.println("Final Train Formation:");
+        System.out.println(trainFormation);
+        System.out.println("Note:");
+        System.out.println("LinkedHashSet preserves insertion order and removes duplicates automatically.");
+        System.out.println("UC5 formation setup completed...");
+    }
+}
+```
+
+UC-5 file location:
+`App/src/UseCase5PreserveInsertionOrderBogies.java`
+
+### Expected Output Format
+```text
+UC5 Preserve Insertion Order of Bogies
+Final Train Formation:
+[Engine, Sleeper, Cargo, Guard]
+Note:
+LinkedHashSet preserves insertion order and removes duplicates automatically.
+UC5 formation setup completed...
+```
+
+### Key Benefits
+- Enforces real-world business rules by preventing duplicate bogies.
+- Preserves physical attachment sequence of the train.
+- Demonstrates ordering plus uniqueness in one data structure.
+- Builds foundation for safe and predictable train composition.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
