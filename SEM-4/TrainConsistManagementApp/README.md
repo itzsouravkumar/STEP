@@ -1546,6 +1546,158 @@ UC14 exception handling completed...
 - Encourages defensive and fail-fast programming.
 - Prevents downstream failures in later use cases.
 
+## UC-15: Safe Cargo Assignment Using try-catch-finally
+
+### Drawback of UC-14 Approach
+UC-14 validates bogies during object creation, but runtime operations can still introduce unsafe states.
+In real railway workflows, cargo assignment happens dynamically and invalid combinations can be selected during execution.
+Without runtime exception handling:
+- Application flow can terminate abruptly.
+- Error feedback becomes unclear.
+- Cleanup and mandatory logging may be skipped.
+
+### Goal
+Safely handle unsafe cargo assignment attempts without crashing the Train Consist Management App.
+
+### Actor
+User
+
+### Flow
+1. User attempts to assign cargo to a goods bogie.
+2. System validates shape-cargo compatibility.
+3. If unsafe combination is detected, exception is thrown.
+4. Exception is caught in `catch` block.
+5. Error message is displayed.
+6. `finally` block executes completion logging.
+7. Program continues safely.
+
+### Key Concepts Used in UC-15
+- `try-catch-finally` for structured exception handling.
+- Runtime exception handling during operational logic.
+- Custom runtime exception (`CargoSafetyException`).
+- `throw` for signaling unsafe conditions.
+- Graceful failure handling without application crash.
+- `finally` for mandatory completion logging.
+
+### Key Requirements
+- Create custom runtime exception class `CargoSafetyException`.
+- Validate cargo-shape compatibility before assignment.
+- Throw exception when petroleum is assigned to rectangular bogie.
+- Catch exception inside assignment logic.
+- Use `finally` block for completion logging.
+- Ensure program continues after a failure.
+
+### Reference Code (UC-15)
+```java
+public class UseCase15SafeCargoAssignmentUsingTryCatchFinally {
+    static class CargoSafetyException extends RuntimeException {
+        CargoSafetyException(String message) {
+            super(message);
+        }
+    }
+
+    static class GoodsBogie {
+        private final String shape;
+        private String cargo;
+
+        GoodsBogie(String shape) {
+            this.shape = shape;
+            this.cargo = "Unassigned";
+        }
+
+        public String getShape() {
+            return shape;
+        }
+
+        public String getCargo() {
+            return cargo;
+        }
+
+        public void setCargo(String cargo) {
+            this.cargo = cargo;
+        }
+
+        @Override
+        public String toString() {
+            return shape + " -> " + cargo;
+        }
+    }
+
+    public static boolean assignCargoSafely(GoodsBogie bogie, String cargo) {
+        try {
+            validateCargoCompatibility(bogie, cargo);
+            bogie.setCargo(cargo);
+            System.out.println("Cargo assigned successfully: " + bogie);
+            return true;
+        } catch (CargoSafetyException e) {
+            System.out.println("Cargo assignment failed: " + e.getMessage());
+            return false;
+        } finally {
+            System.out.println("Cargo assignment validation completed for: " + bogie.getShape());
+        }
+    }
+
+    private static void validateCargoCompatibility(GoodsBogie bogie, String cargo) {
+        if (bogie.getShape().equalsIgnoreCase("Rectangular")
+                && cargo.equalsIgnoreCase("Petroleum")) {
+            throw new CargoSafetyException("Petroleum cannot be assigned to Rectangular bogie");
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC15 - Safe Cargo Assignment Using try-catch-finally");
+
+        GoodsBogie cylindrical = new GoodsBogie("Cylindrical");
+        GoodsBogie rectangular = new GoodsBogie("Rectangular");
+        GoodsBogie open = new GoodsBogie("Open");
+
+        assignCargoSafely(cylindrical, "Petroleum");
+        assignCargoSafely(rectangular, "Petroleum");
+        assignCargoSafely(open, "Coal");
+
+        System.out.println("Final Goods Bogies State:");
+        System.out.println(cylindrical);
+        System.out.println(rectangular);
+        System.out.println(open);
+        System.out.println("UC15 runtime exception handling completed...");
+    }
+}
+```
+
+UC-15 file locations:
+`App/src/UseCase15SafeCargoAssignmentUsingTryCatchFinally.java`
+`App/src/UseCase15SafeCargoAssignmentUsingTryCatchFinallyTest.java`
+
+### Expected Output Format
+```text
+UC15 - Safe Cargo Assignment Using try-catch-finally
+Cargo assigned successfully: Cylindrical -> Petroleum
+Cargo assignment validation completed for: Cylindrical
+Cargo assignment failed: Petroleum cannot be assigned to Rectangular bogie
+Cargo assignment validation completed for: Rectangular
+Cargo assigned successfully: Open -> Coal
+Cargo assignment validation completed for: Open
+Final Goods Bogies State:
+Cylindrical -> Petroleum
+Rectangular -> Unassigned
+Open -> Coal
+UC15 runtime exception handling completed...
+```
+
+### Suggested Test Cases
+- `testCargo_SafeAssignment()`
+- `testCargo_UnsafeAssignmentHandled()`
+- `testCargo_CargoNotAssignedAfterFailure()`
+- `testCargo_ProgramContinuesAfterException()`
+- `testCargo_FinallyBlockExecution()`
+
+### Key Benefits
+- Improves runtime safety during cargo operations.
+- Demonstrates practical unchecked exception handling.
+- Teaches structured error handling flow.
+- Ensures execution continuity after failures.
+- Reinforces defensive operational coding.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
