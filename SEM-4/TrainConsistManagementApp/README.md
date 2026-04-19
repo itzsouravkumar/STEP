@@ -1255,6 +1255,162 @@ UC12 safety validation completed...
 - Replaces manual validations with declarative stream rules.
 - Improves reliability of train formation logic.
 
+## UC-13: Performance Comparison (Loops vs Streams)
+
+### Drawback of UC-12 Approach
+UC-12 uses streams for readability and concise safety checks, but it does not measure runtime behavior.
+For large train datasets with frequent filtering and validation, assumptions about speed can be misleading.
+Without performance measurement:
+- Developers optimize blindly.
+- Stream and loop tradeoffs remain unclear.
+- Decisions become style-driven instead of evidence-driven.
+
+### Goal
+Compare loop-based and stream-based filtering performance using `System.nanoTime()`.
+
+### Actor
+User
+
+### Flow
+1. User prepares a collection of bogies.
+2. System records start time using `System.nanoTime()`.
+3. Filtering is executed using loop logic.
+4. System records elapsed loop duration.
+5. Filtering is executed using stream logic.
+6. System records elapsed stream duration.
+7. Execution times are displayed and results are compared.
+8. Program continues.
+
+### Key Concepts Used in UC-13
+- `System.nanoTime()` for high-resolution execution-time measurement.
+- Performance benchmarking for small code blocks.
+- Loop-based filtering using imperative iteration.
+- Stream-based filtering using declarative pipeline (`filter`, `collect`).
+- Micro-measurement awareness for runtime decisions.
+- Evidence-driven optimization mindset.
+
+### Key Requirements
+- Create a bogie collection for performance testing.
+- Capture start and end timestamps with `System.nanoTime()`.
+- Run loop-based filtering and stream-based filtering.
+- Compute elapsed time using `(end - start)`.
+- Display execution duration for both approaches.
+- Confirm both approaches return consistent filtered results.
+
+### Reference Code (UC-13)
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UseCase13PerformanceComparisonLoopsVsStreams {
+    static class Bogie {
+        private final String name;
+        private final int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return name + " -> " + capacity;
+        }
+    }
+
+    public static List<Bogie> filterUsingLoop(List<Bogie> bogies, int threshold) {
+        List<Bogie> filteredBogies = new ArrayList<>();
+        for (Bogie bogie : bogies) {
+            if (bogie.getCapacity() > threshold) {
+                filteredBogies.add(bogie);
+            }
+        }
+        return filteredBogies;
+    }
+
+    public static List<Bogie> filterUsingStream(List<Bogie> bogies, int threshold) {
+        return bogies.stream()
+                .filter(bogie -> bogie.getCapacity() > threshold)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Bogie> createBogieDataset(int size) {
+        List<Bogie> bogies = new ArrayList<>();
+        String[] bogieTypes = {"Sleeper", "AC Chair", "First Class", "General"};
+
+        for (int i = 0; i < size; i++) {
+            String type = bogieTypes[i % bogieTypes.length];
+            int capacity = 40 + (i % 80);
+            bogies.add(new Bogie(type, capacity));
+        }
+
+        return bogies;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC13 - Performance Comparison (Loops vs Streams)");
+
+        int capacityThreshold = 60;
+        List<Bogie> bogies = createBogieDataset(200000);
+
+        System.out.println("Total Bogies Prepared: " + bogies.size());
+        System.out.println("Filtering Rule: Capacity > " + capacityThreshold);
+
+        long loopStart = System.nanoTime();
+        List<Bogie> loopFiltered = filterUsingLoop(bogies, capacityThreshold);
+        long loopEnd = System.nanoTime();
+        long loopElapsed = loopEnd - loopStart;
+
+        long streamStart = System.nanoTime();
+        List<Bogie> streamFiltered = filterUsingStream(bogies, capacityThreshold);
+        long streamEnd = System.nanoTime();
+        long streamElapsed = streamEnd - streamStart;
+
+        System.out.println("Loop Filtered Bogies: " + loopFiltered.size());
+        System.out.println("Stream Filtered Bogies: " + streamFiltered.size());
+        System.out.println("Execution Time (Loop): " + loopElapsed + " ns");
+        System.out.println("Execution Time (Stream): " + streamElapsed + " ns");
+        System.out.println("Results Match: " + (loopFiltered.size() == streamFiltered.size()));
+        System.out.println("UC13 benchmarking completed...");
+    }
+}
+```
+
+UC-13 file locations:
+`App/src/UseCase13PerformanceComparisonLoopsVsStreams.java`
+`App/src/UseCase13PerformanceComparisonLoopsVsStreamsTest.java`
+
+### Expected Output Format
+```text
+UC13 - Performance Comparison (Loops vs Streams)
+Total Bogies Prepared: 200000
+Filtering Rule: Capacity > 60
+Loop Filtered Bogies: 147500
+Stream Filtered Bogies: 147500
+Execution Time (Loop): 9157000 ns
+Execution Time (Stream): 12298000 ns
+Results Match: true
+UC13 benchmarking completed...
+```
+
+### Suggested Test Cases
+- `testLoopFilteringLogic()`
+- `testStreamFilteringLogic()`
+- `testLoopAndStreamResultsMatch()`
+- `testExecutionTimeMeasurement()`
+- `testLargeDatasetProcessing()`
+
+### Key Benefits
+- Introduces practical performance benchmarking in Java.
+- Compares imperative and declarative filtering styles with evidence.
+- Prevents premature optimization assumptions.
+- Builds measurement-driven development habits.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
