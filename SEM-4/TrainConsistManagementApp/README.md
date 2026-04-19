@@ -7,7 +7,7 @@ Console-based Java app to simulate railway train consist management.
 - Goods bogies: Rectangular, Cylindrical
 - Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases Implemented (up to UC-15)
+## Use Cases Implemented (up to UC-16)
 
 ## UC-1: Initialize Train and Display Consist Summary
 - Purpose: Start the app and show initial train consist state.
@@ -143,6 +143,15 @@ Console-based Java app to simulate railway train consist management.
 - Validation Focus: Petroleum not allowed in rectangular bogie.
 - File: `App/src/UseCase15SafeCargoAssignmentUsingTryCatchFinally.java`.
 - Outcome: Application continues safely after assignment failure.
+
+## UC-16: Sort Passenger Bogies by Capacity (Bubble Sort)
+- Purpose: Demonstrate manual sorting of bogie capacities.
+- Problem Addressed: Library sorting hides algorithm fundamentals.
+- Flow: Compare adjacent values, swap if needed, repeat passes.
+- Core Java: Arrays, nested loops, swapping logic.
+- Validation Focus: Ascending order without using sort libraries.
+- File: `App/src/UseCase16SortPassengerBogiesByCapacityBubbleSort.java`.
+- Outcome: Strengthens algorithmic understanding before advanced APIs.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
