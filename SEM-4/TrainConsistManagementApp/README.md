@@ -1411,6 +1411,141 @@ UC13 benchmarking completed...
 - Prevents premature optimization assumptions.
 - Builds measurement-driven development habits.
 
+## UC-14: Handle Invalid Bogie Capacity (Custom Exception)
+
+### Drawback of UC-13 Approach
+UC-13 compares performance but assumes all bogie data is valid.
+In real train systems, invalid values like zero or negative capacity may enter from user input or corrupted data.
+If invalid capacities are accepted:
+- Passenger allocation becomes incorrect.
+- Safety and reporting logic become unreliable.
+- Defects propagate silently into later use cases.
+
+### Goal
+Prevent invalid passenger bogies from being created by enforcing capacity validation with a custom exception.
+
+### Actor
+User
+
+### Flow
+1. User attempts to create a passenger bogie.
+2. System validates bogie capacity.
+3. If capacity is less than or equal to zero, custom exception is thrown.
+4. If capacity is valid, bogie is created successfully.
+5. Program continues safely.
+
+### Key Concepts Used in UC-14
+- Custom exception (`InvalidCapacityException`) for domain-specific validation failure.
+- Exception inheritance using `extends Exception`.
+- `throw` keyword to raise business-rule violations.
+- `throws` declaration in constructor signature.
+- Fail-fast validation to reject invalid objects at creation time.
+- Business rule enforcement inside domain model.
+
+### Key Requirements
+- Create `InvalidCapacityException` class.
+- Validate capacity inside passenger bogie constructor.
+- Throw exception when capacity is less than or equal to zero.
+- Declare constructor with `throws InvalidCapacityException`.
+- Ensure invalid bogies are never added to train consist.
+
+### Reference Code (UC-14)
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+class InvalidCapacityException extends Exception {
+    public InvalidCapacityException(String message) {
+        super(message);
+    }
+}
+
+public class UseCase14HandleInvalidBogieCapacity {
+    static class PassengerBogie {
+        private final String type;
+        private final int capacity;
+
+        PassengerBogie(String type, int capacity) throws InvalidCapacityException {
+            if (capacity <= 0) {
+                throw new InvalidCapacityException("Capacity must be greater than zero");
+            }
+            this.type = type;
+            this.capacity = capacity;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return type + " -> " + capacity;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("UC14 - Handle Invalid Bogie Capacity (Custom Exception)");
+
+        List<PassengerBogie> consist = new ArrayList<>();
+
+        try {
+            PassengerBogie sleeper = new PassengerBogie("Sleeper", 72);
+            consist.add(sleeper);
+            System.out.println("Added: " + sleeper);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error while adding Sleeper bogie: " + e.getMessage());
+        }
+
+        try {
+            PassengerBogie invalid = new PassengerBogie("AC Chair", 0);
+            consist.add(invalid);
+            System.out.println("Added: " + invalid);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error while adding AC Chair bogie: " + e.getMessage());
+        }
+
+        System.out.println("Final Passenger Bogies in Train:");
+        for (PassengerBogie bogie : consist) {
+            System.out.println(bogie);
+        }
+        System.out.println("UC14 exception handling completed...");
+    }
+}
+```
+
+UC-14 file locations:
+`App/src/UseCase14HandleInvalidBogieCapacity.java`
+`App/src/UseCase14HandleInvalidBogieCapacityTest.java`
+
+### Expected Output Format
+```text
+UC14 - Handle Invalid Bogie Capacity (Custom Exception)
+Added: Sleeper -> 72
+Error while adding AC Chair bogie: Capacity must be greater than zero
+Final Passenger Bogies in Train:
+Sleeper -> 72
+UC14 exception handling completed...
+```
+
+### Suggested Test Cases
+- `testException_ValidCapacityCreation()`
+- `testException_NegativeCapacityThrowsException()`
+- `testException_ZeroCapacityThrowsException()`
+- `testException_ExceptionMessageValidation()`
+- `testException_ObjectIntegrityAfterCreation()`
+- `testException_MultipleValidBogiesCreation()`
+
+### Key Benefits
+- Protects train consist from invalid passenger data.
+- Encapsulates validation into the domain object.
+- Introduces checked exception handling clearly.
+- Encourages defensive and fail-fast programming.
+- Prevents downstream failures in later use cases.
+
 ## IntelliJ Setup
 1. Open the `STEP` repository in IntelliJ IDEA.
 2. Navigate to `SEM-4/TrainConsistManagementApp/App/src`.
