@@ -1,30 +1,148 @@
 # Train Consist Management App
 
-Console-based Java app to model railway train consist operations.
+Console-based Java app to simulate railway train consist management.
 
-## Scope
+## App Scope
 - Passenger bogies: Sleeper, AC Chair, First Class
 - Goods bogies: Rectangular, Cylindrical
-- Capacity, composition, cargo safety, validation, and runtime handling
+- Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases (Implemented up to UC-15)
-| UC | Topic | Core Concept | Class |
-|---|---|---|---|
-| 1 | Initialize Train and Show Consist | Class, main(), ArrayList | `TrainConsistApp.java` |
-| 2 | Add Passenger Bogies | ArrayList add/remove/contains | `UseCase2AddPassengerBogies.java` |
-| 3 | Track Unique Bogie IDs | HashSet uniqueness | `UseCase3TrackUniqueBogieIds.java` |
-| 4 | Maintain Ordered Bogie Consist | LinkedList ordering operations | `UseCase4MaintainOrderedBogieConsist.java` |
-| 5 | Preserve Insertion Order | LinkedHashSet order + uniqueness | `UseCase5PreserveInsertionOrderBogies.java` |
-| 6 | Map Bogie to Capacity | HashMap key-value mapping | `UseCase6MapBogieToCapacity.java` |
-| 7 | Sort Bogies by Capacity | Comparator and sorting | `UseCase7SortBogiesByCapacity.java` |
-| 8 | Filter Passenger Bogies | Streams filter + collect | `UseCase8FilterPassengerBogiesUsingStreams.java` |
-| 9 | Group Bogies by Type | Collectors.groupingBy | `UseCase9GroupBogiesByType.java` |
-| 10 | Count Total Seats | Streams map + reduce | `UseCase10CountTotalSeatsInTrain.java` |
-| 11 | Validate Train/Cargo Codes | Regex Pattern/Matcher | `UseCase11ValidateTrainIdAndCargoCode.java` |
-| 12 | Safety Compliance for Goods Bogies | Streams allMatch rules | `UseCase12SafetyComplianceGoodsBogies.java` |
-| 13 | Loop vs Stream Performance | System.nanoTime benchmarking | `UseCase13PerformanceComparisonLoopsVsStreams.java` |
-| 14 | Invalid Capacity Handling | Custom checked exception | `UseCase14HandleInvalidBogieCapacity.java` |
-| 15 | Safe Cargo Assignment | try-catch-finally + runtime exception | `UseCase15SafeCargoAssignmentUsingTryCatchFinally.java` |
+## Use Cases Implemented (up to UC-15)
+
+## UC-1: Initialize Train and Display Consist Summary
+- Purpose: Start the app and show initial train consist state.
+- Problem Addressed: System needs a clear entry point and initial status.
+- Flow: Run app, initialize list, print count and consist.
+- Core Java: Class, `main()`, `ArrayList`, `List`.
+- Validation Focus: Confirms empty consist at startup.
+- File: `App/src/TrainConsistApp.java`.
+- Outcome: Foundation ready for all upcoming use cases.
+
+## UC-2: Add Passenger Bogies to Train
+- Purpose: Support dynamic add/remove operations on passenger bogies.
+- Problem Addressed: UC-1 had initialization but no bogie updates.
+- Flow: Add bogies, remove one, check existence, print final state.
+- Core Java: `ArrayList` methods `add`, `remove`, `contains`.
+- Validation Focus: Confirms list mutation behavior is correct.
+- File: `App/src/UseCase2AddPassengerBogies.java`.
+- Outcome: Basic consist CRUD behavior is established.
+
+## UC-3: Track Unique Bogie IDs
+- Purpose: Ensure duplicate bogie IDs are not accepted.
+- Problem Addressed: List-based storage allows accidental duplicates.
+- Flow: Insert multiple IDs including duplicates and inspect result.
+- Core Java: `HashSet` with automatic uniqueness.
+- Validation Focus: Duplicate IDs are ignored safely.
+- File: `App/src/UseCase3TrackUniqueBogieIds.java`.
+- Outcome: ID integrity is enforced at collection level.
+
+## UC-4: Maintain Ordered Bogie Consist
+- Purpose: Keep bogie order controllable from front and rear.
+- Problem Addressed: Order-sensitive operations need better structure.
+- Flow: Add at ends, remove from ends, inspect sequence.
+- Core Java: `LinkedList` deque-like operations.
+- Validation Focus: Correct order after insertion and deletion.
+- File: `App/src/UseCase4MaintainOrderedBogieConsist.java`.
+- Outcome: Operational ordering logic becomes explicit.
+
+## UC-5: Preserve Insertion Order of Bogies
+- Purpose: Keep insertion order while also avoiding duplicates.
+- Problem Addressed: `HashSet` removes duplicates but loses order.
+- Flow: Add bogies with repeats and print final ordered set.
+- Core Java: `LinkedHashSet` for ordered uniqueness.
+- Validation Focus: Order retained and duplicates skipped.
+- File: `App/src/UseCase5PreserveInsertionOrderBogies.java`.
+- Outcome: Predictable, clean bogie listing for reporting.
+
+## UC-6: Map Bogie to Capacity
+- Purpose: Link each bogie type/ID to its seat capacity.
+- Problem Addressed: Sequential lists are weak for keyed lookup.
+- Flow: Insert key-value entries and fetch mapped capacities.
+- Core Java: `HashMap` operations `put`, `get`, `containsKey`.
+- Validation Focus: Accurate capacity retrieval by key.
+- File: `App/src/UseCase6MapBogieToCapacity.java`.
+- Outcome: Fast lookup model for capacity analytics.
+
+## UC-7: Sort Bogies by Capacity
+- Purpose: Arrange bogies by capacity for planning visibility.
+- Problem Addressed: Unsorted data hides high/low-capacity structure.
+- Flow: Build bogie list, apply sort, print ordered output.
+- Core Java: `Comparator` with `Collections.sort`/`List.sort`.
+- Validation Focus: Ascending/expected ordering of capacities.
+- File: `App/src/UseCase7SortBogiesByCapacity.java`.
+- Outcome: Capacity ranking becomes easy to interpret.
+
+## UC-8: Filter Passenger Bogies Using Streams
+- Purpose: Extract bogies above a capacity threshold.
+- Problem Addressed: Manual loop filtering is verbose and repetitive.
+- Flow: Stream list, apply `filter`, collect matching bogies.
+- Core Java: Stream API `filter()` and `collect()`.
+- Validation Focus: Only eligible bogies remain in results.
+- File: `App/src/UseCase8FilterPassengerBogiesUsingStreams.java`.
+- Outcome: Cleaner and reusable filtering logic.
+
+## UC-9: Group Bogies by Type
+- Purpose: Organize bogies into categorized groups.
+- Problem Addressed: Flat lists are hard for type-wise reporting.
+- Flow: Stream bogies and group with classification key.
+- Core Java: `Collectors.groupingBy()`.
+- Validation Focus: Correct keys and grouped member counts.
+- File: `App/src/UseCase9GroupBogiesByType.java`.
+- Outcome: Structured output for dashboards and summaries.
+
+## UC-10: Count Total Seats in Train
+- Purpose: Compute total train seating capacity.
+- Problem Addressed: Grouped data still lacks one aggregate metric.
+- Flow: Map bogies to capacity and reduce to total.
+- Core Java: Streams `map()` + `reduce()`.
+- Validation Focus: Sum includes all bogies exactly once.
+- File: `App/src/UseCase10CountTotalSeatsInTrain.java`.
+- Outcome: Supports planning and utilization decisions.
+
+## UC-11: Validate Train ID and Cargo Code
+- Purpose: Enforce strict input formats before processing.
+- Problem Addressed: Invalid IDs/codes can corrupt operations.
+- Flow: Read values, apply regex match, show valid/invalid result.
+- Core Java: `Pattern`, `Matcher`, `matches()`.
+- Validation Focus: Exact format compliance.
+- File: `App/src/UseCase11ValidateTrainIdAndCargoCode.java`.
+- Outcome: Data quality is protected at input boundary.
+
+## UC-12: Safety Compliance Check for Goods Bogies
+- Purpose: Enforce cargo safety policy for goods train formation.
+- Problem Addressed: Unsafe cargo-shape combinations can pass silently.
+- Flow: Stream bogies and apply full compliance predicate.
+- Core Java: Streams `allMatch()` with rule conditions.
+- Validation Focus: Cylindrical bogie policy enforcement.
+- File: `App/src/UseCase12SafetyComplianceGoodsBogies.java`.
+- Outcome: Unsafe formations are detected early.
+
+## UC-13: Performance Comparison (Loops vs Streams)
+- Purpose: Benchmark loop and stream filtering performance.
+- Problem Addressed: Readability assumptions do not guarantee speed.
+- Flow: Run both approaches, capture `nanoTime`, compare elapsed time.
+- Core Java: `System.nanoTime()`, loops, Streams.
+- Validation Focus: Result consistency plus timing values.
+- File: `App/src/UseCase13PerformanceComparisonLoopsVsStreams.java`.
+- Outcome: Optimization choices become measurement-driven.
+
+## UC-14: Handle Invalid Bogie Capacity (Custom Exception)
+- Purpose: Block invalid passenger bogies at creation time.
+- Problem Addressed: Zero/negative capacity causes downstream failures.
+- Flow: Validate in constructor and throw checked exception on failure.
+- Core Java: Custom exception, `throw`, `throws`.
+- Validation Focus: Capacity must be greater than zero.
+- File: `App/src/UseCase14HandleInvalidBogieCapacity.java`.
+- Outcome: Domain rules are enforced with fail-fast behavior.
+
+## UC-15: Safe Cargo Assignment Using try-catch-finally
+- Purpose: Handle unsafe runtime cargo assignment gracefully.
+- Problem Addressed: Runtime errors can crash flow without handling.
+- Flow: Validate, throw runtime exception, catch, always run finally.
+- Core Java: `try-catch-finally`, custom runtime exception.
+- Validation Focus: Petroleum not allowed in rectangular bogie.
+- File: `App/src/UseCase15SafeCargoAssignmentUsingTryCatchFinally.java`.
+- Outcome: Application continues safely after assignment failure.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
