@@ -1,21 +1,67 @@
 # Train Consist Management App
 
-Console-based Java app to model railway train consist operations.
+Console-based Java app to simulate railway train consist management.
 
-## Scope
+## App Scope
 - Passenger bogies: Sleeper, AC Chair, First Class
 - Goods bogies: Rectangular, Cylindrical
-- Capacity, composition, cargo safety, validation, and runtime handling
+- Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases (Implemented up to UC-6)
-| UC | Topic | Core Concept | Class |
-|---|---|---|---|
-| 1 | Initialize Train and Show Consist | Class, main(), ArrayList | `TrainConsistApp.java` |
-| 2 | Add Passenger Bogies | ArrayList add/remove/contains | `UseCase2AddPassengerBogies.java` |
-| 3 | Track Unique Bogie IDs | HashSet uniqueness | `UseCase3TrackUniqueBogieIds.java` |
-| 4 | Maintain Ordered Bogie Consist | LinkedList ordering operations | `UseCase4MaintainOrderedBogieConsist.java` |
-| 5 | Preserve Insertion Order | LinkedHashSet order + uniqueness | `UseCase5PreserveInsertionOrderBogies.java` |
-| 6 | Map Bogie to Capacity | HashMap key-value mapping | `UseCase6MapBogieToCapacity.java` |
+## Use Cases Implemented (up to UC-6)
+
+## UC-1: Initialize Train and Display Consist Summary
+- Purpose: Start the app and show initial train consist state.
+- Problem Addressed: System needs a clear entry point and initial status.
+- Flow: Run app, initialize list, print count and consist.
+- Core Java: Class, `main()`, `ArrayList`, `List`.
+- Validation Focus: Confirms empty consist at startup.
+- File: `App/src/TrainConsistApp.java`.
+- Outcome: Foundation ready for all upcoming use cases.
+
+## UC-2: Add Passenger Bogies to Train
+- Purpose: Support dynamic add/remove operations on passenger bogies.
+- Problem Addressed: UC-1 had initialization but no bogie updates.
+- Flow: Add bogies, remove one, check existence, print final state.
+- Core Java: `ArrayList` methods `add`, `remove`, `contains`.
+- Validation Focus: Confirms list mutation behavior is correct.
+- File: `App/src/UseCase2AddPassengerBogies.java`.
+- Outcome: Basic consist CRUD behavior is established.
+
+## UC-3: Track Unique Bogie IDs
+- Purpose: Ensure duplicate bogie IDs are not accepted.
+- Problem Addressed: List-based storage allows accidental duplicates.
+- Flow: Insert multiple IDs including duplicates and inspect result.
+- Core Java: `HashSet` with automatic uniqueness.
+- Validation Focus: Duplicate IDs are ignored safely.
+- File: `App/src/UseCase3TrackUniqueBogieIds.java`.
+- Outcome: ID integrity is enforced at collection level.
+
+## UC-4: Maintain Ordered Bogie Consist
+- Purpose: Keep bogie order controllable from front and rear.
+- Problem Addressed: Order-sensitive operations need better structure.
+- Flow: Add at ends, remove from ends, inspect sequence.
+- Core Java: `LinkedList` deque-like operations.
+- Validation Focus: Correct order after insertion and deletion.
+- File: `App/src/UseCase4MaintainOrderedBogieConsist.java`.
+- Outcome: Operational ordering logic becomes explicit.
+
+## UC-5: Preserve Insertion Order of Bogies
+- Purpose: Keep insertion order while also avoiding duplicates.
+- Problem Addressed: `HashSet` removes duplicates but loses order.
+- Flow: Add bogies with repeats and print final ordered set.
+- Core Java: `LinkedHashSet` for ordered uniqueness.
+- Validation Focus: Order retained and duplicates skipped.
+- File: `App/src/UseCase5PreserveInsertionOrderBogies.java`.
+- Outcome: Predictable, clean bogie listing for reporting.
+
+## UC-6: Map Bogie to Capacity
+- Purpose: Link each bogie type/ID to its seat capacity.
+- Problem Addressed: Sequential lists are weak for keyed lookup.
+- Flow: Insert key-value entries and fetch mapped capacities.
+- Core Java: `HashMap` operations `put`, `get`, `containsKey`.
+- Validation Focus: Accurate capacity retrieval by key.
+- File: `App/src/UseCase6MapBogieToCapacity.java`.
+- Outcome: Fast lookup model for capacity analytics.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
