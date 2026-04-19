@@ -7,7 +7,7 @@ Console-based Java app to simulate railway train consist management.
 - Goods bogies: Rectangular, Cylindrical
 - Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases Implemented (up to UC-16)
+## Use Cases Implemented (up to UC-17)
 
 ## UC-1: Initialize Train and Display Consist Summary
 - Purpose: Start the app and show initial train consist state.
@@ -152,6 +152,15 @@ Console-based Java app to simulate railway train consist management.
 - Validation Focus: Ascending order without using sort libraries.
 - File: `App/src/UseCase16SortPassengerBogiesByCapacityBubbleSort.java`.
 - Outcome: Strengthens algorithmic understanding before advanced APIs.
+
+## UC-17: Sort Bogie Names Using Arrays.sort()
+- Purpose: Sort bogie names alphabetically using Java built-ins.
+- Problem Addressed: Manual sort algorithms are slower and verbose.
+- Flow: Build array, call `Arrays.sort()`, print sorted output.
+- Core Java: `Arrays.sort()`, natural string ordering, `Arrays.toString()`.
+- Validation Focus: Alphabetical order with duplicates retained.
+- File: `App/src/UseCase17SortBogieNamesUsingArraysSort.java`.
+- Outcome: Cleaner and faster sorting for production-style usage.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
