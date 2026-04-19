@@ -1,16 +1,22 @@
 # Train Consist Management App
 
-Console-based Java app to model railway train consist operations.
+Console-based Java app to simulate railway train consist management.
 
-## Scope
+## App Scope
 - Passenger bogies: Sleeper, AC Chair, First Class
 - Goods bogies: Rectangular, Cylindrical
-- Capacity, composition, cargo safety, validation, and runtime handling
+- Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases (Implemented up to UC-1)
-| UC | Topic | Core Concept | Class |
-|---|---|---|---|
-| 1 | Initialize Train and Show Consist | Class, main(), ArrayList | `TrainConsistApp.java` |
+## Use Cases Implemented (up to UC-1)
+
+## UC-1: Initialize Train and Display Consist Summary
+- Purpose: Start the app and show initial train consist state.
+- Problem Addressed: System needs a clear entry point and initial status.
+- Flow: Run app, initialize list, print count and consist.
+- Core Java: Class, `main()`, `ArrayList`, `List`.
+- Validation Focus: Confirms empty consist at startup.
+- File: `App/src/TrainConsistApp.java`.
+- Outcome: Foundation ready for all upcoming use cases.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
