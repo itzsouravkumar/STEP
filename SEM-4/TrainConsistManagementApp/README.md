@@ -7,7 +7,7 @@ Console-based Java app to simulate railway train consist management.
 - Goods bogies: Rectangular, Cylindrical
 - Capacity tracking, safety checks, validation, and runtime handling
 
-## Use Cases Implemented (up to UC-19)
+## Use Cases Implemented (up to UC-20)
 
 ## UC-1: Initialize Train and Display Consist Summary
 - Purpose: Start the app and show initial train consist state.
@@ -179,6 +179,15 @@ Console-based Java app to simulate railway train consist management.
 - Validation Focus: Match detection and safe not-found handling.
 - File: `App/src/UseCase19BinarySearchForBogieIdOptimizedSearching.java`.
 - Outcome: Delivers efficient O(log n) style lookup capability.
+
+## UC-20: Exception Handling During Search Operations
+- Purpose: Prevent invalid search execution on empty train data.
+- Problem Addressed: Empty collections make searches meaningless and unsafe.
+- Flow: Validate state first, throw exception, stop operation early.
+- Core Java: defensive checks, `IllegalStateException`, fail-fast design.
+- Validation Focus: Search allowed only when bogies exist.
+- File: `App/src/UseCase20ExceptionHandlingDuringSearchOperations.java`.
+- Outcome: Improves reliability through explicit runtime state validation.
 
 ## Quick Run
 From `SEM-4/TrainConsistManagementApp/App/src`:
